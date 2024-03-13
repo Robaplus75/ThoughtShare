@@ -19,8 +19,12 @@ def create_app():
         print("DATABASE CREATED")
     
     from app.views.user import bp as user_bp
+    from app.views.blog import bp as blog_bp
     from app.views.user import login_manager
+
     app.register_blueprint(user_bp)
+    app.register_blueprint(blog_bp)
+
     login_manager.login_view = 'users.login'
     login_manager.login_message_category = 'error'
     login_manager.init_app(app)
