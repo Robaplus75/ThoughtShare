@@ -1,1 +1,1 @@
-Blog web app in flask
+Portfolio Project: Blog web app in flask
