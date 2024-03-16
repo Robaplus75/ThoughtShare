@@ -49,7 +49,6 @@ def create():
 
 @bp.route("/detail/<slug>")
 def detail(slug):
-    return redirect(url_for("blog.posts"))
     post = Posts.query.filter(Posts.slug==slug).first()
     if not post:
         flash("Post Does not exist", category="error")

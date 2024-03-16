@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, send_from_directory
 from os import path, makedirs
 from .extensions import db
 from pathlib import Path
@@ -6,7 +6,7 @@ from pathlib import Path
 def create_app():
     app = Flask(__name__)
 
-    UPLOAD_FOLDER = 'uploads'
+    UPLOAD_FOLDER = 'app/uploads'
     if not path.exists(UPLOAD_FOLDER):
         makedirs(UPLOAD_FOLDER)
 
@@ -29,6 +29,10 @@ def create_app():
     login_manager.login_view = 'users.login'
     login_manager.login_message_category = 'error'
     login_manager.init_app(app)
+
+    @app.route('/uploads/<filename>')
+    def uploads(filename):
+        return send_from_directory(app.config['UPLOAD_FOLDER'].absolute(), filename)
 
     return app
 
