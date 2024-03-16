@@ -17,7 +17,6 @@ def save_image(file):
 
 
 @bp.route('/')
-@login_required
 def posts():
     posts = Posts.query.all()
     return render_template('index.html', posts=posts)
@@ -45,7 +44,7 @@ def create():
             flash("Post created Successfully", category="success")
             return redirect(url_for('blog.detail', slug=slug))
 
-    return render_template("blog/form.html", title="Create Post")
+    return render_template("blog/form.html", title="Create Post", post=None)
 
 @bp.route("/detail/<slug>")
 def detail(slug):
@@ -60,7 +59,6 @@ def detail(slug):
 @login_required
 def update(slug):
     post = Posts.query.filter(Posts.slug==slug).first()
-    values = {'title':post.title, 'slug':post.slug, 'body':post.body, 'tags':post.tags}
     if not post:
         flash("Post does not exist", category='error')
         return redirect(url_for('blog.posts'))
@@ -70,23 +68,26 @@ def update(slug):
         image = request.files.get("image")
         body = request.form.get("body")
         tags = request.form.get("tags")
+        publish = request.form.get("publish")
 
-        if not title or not slug or body or not publish or not tags:
+        if not title or not slug or not body or not publish:
             flash("Please complete the form to update your post", category="error")
         else:
             if image:
                 filename = save_image(image)
                 post.image = filename
+            if tags:
+                post.tags = tags
             post.title = title
             post.slug = slug
             post.body = body
-            post.tags = tags
+            post.publish = datetime.strptime(publish, '%Y-%m-%d').date()
             
             db.session.commit()
             flash("Post Updated Successfully", category="success")
-            return redirect(f"/{slug}")
+            return redirect(url_for('blog.detail', slug=slug))
 
-    return render_template("blog/form.html", values=values, title="Update Post")
+    return render_template("blog/form.html", post=post, title="Update Post")
 
 @bp.route("/delete/<slug>")
 def delete(slug):
