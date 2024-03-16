@@ -1,4 +1,32 @@
 {% extends 'layout.html' %}
 {% block content %}
-    
+    {% include 'flashes/flashes.html' %}
+    <div class="container">
+        <div class="col-md-8 offset-md-2">
+            <form action="" method="POST" id="form" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" name="title" id="title" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="image" class="form-label">Image</label>
+                    <input type="file" name="image" id="image" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="body" class="form-label">Body</label>
+                    <textarea name="body" id="body" class="form-control"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="tags" class="form-label">Tags</label>
+                    <input type="text" name="tags" id="tags" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="publish" class="form-label">Publish</label>
+                    <input type="date" name="publish" id="publish" class="form-control">
+                </div>
+                <hr>
+                <button class="btn btn-primary btn-lg">Save Post</button>
+            </form>
+        </div>
+    </div>
 {% endblock %}

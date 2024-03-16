@@ -59,6 +59,7 @@ def login():
             else:
                 flash("Login is Successful", category='success')
                 login_user(user)
+                return redirect(url_for("blog.posts"))
     return render_template('users/login.html')
 
 @bp.route('/logout')

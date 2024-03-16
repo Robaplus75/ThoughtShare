@@ -1,6 +1,7 @@
 from flask import Flask
 from os import path, makedirs
 from .extensions import db
+from pathlib import Path
 
 def create_app():
     app = Flask(__name__)
@@ -11,7 +12,7 @@ def create_app():
 
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
     app.config['SECRET_KEY'] = "robel123robel123"
-    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+    app.config['UPLOAD_FOLDER'] = Path() / UPLOAD_FOLDER
     db.init_app(app)
 
     if not path.exists('instance/database.db'):
