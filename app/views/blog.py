@@ -5,7 +5,9 @@ from werkzeug.utils import secure_filename
 from ..models.blog import Posts
 from ..extensions import db
 from datetime import datetime
+from .tags import create_tags, update_tags, get_tags
 import os
+
 
 bp = Blueprint("blog", __name__)
 
@@ -41,6 +43,9 @@ def create():
             post = Posts(title=title, image=filename, slug=slug, body=body, publish=publish_date, user_id=user_id )
             db.session.add(post)
             db.session.commit()
+            
+            create_tags(tags.split(','), post.id)
+
             flash("Post created Successfully", category="success")
             return redirect(url_for('blog.detail', slug=slug))
 
@@ -53,7 +58,8 @@ def detail(slug):
         flash("Post Does not exist", category="error")
         return redirect(url_for('blog.posts'))
     else:
-        return render_template("blog/detail.html", post=post)
+        tags = get_tags(post.id)
+        return render_template("blog/detail.html", post=post, tags=tags)
 
 @bp.route("/update/<slug>", methods=["GET", "POST"])
 @login_required
@@ -62,6 +68,7 @@ def update(slug):
     if not post:
         flash("Post does not exist", category='error')
         return redirect(url_for('blog.posts'))
+    getTags = get_tags(post.id)
     if request.method == "POST":
         title = request.form.get('title')
         slug = slugify(title)
@@ -76,8 +83,8 @@ def update(slug):
             if image:
                 filename = save_image(image)
                 post.image = filename
-            if tags:
-                post.tags = tags
+
+            update_tags(tags.split(','), post.id)
             post.title = title
             post.slug = slug
             post.body = body
@@ -87,7 +94,7 @@ def update(slug):
             flash("Post Updated Successfully", category="success")
             return redirect(url_for('blog.detail', slug=slug))
 
-    return render_template("blog/form.html", post=post, title="Update Post")
+    return render_template("blog/form.html", post=post, title="Update Post", tags=getTags)
 
 @bp.route("/delete/<slug>")
 def delete(slug):

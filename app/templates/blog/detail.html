@@ -6,6 +6,11 @@
             <h1>{{ post.title }}</h1>
             <img src="{{ url_for('uploads', filename=post.image) }}" alt="image" class="img-fluid">
             <p>{{ post.body }}</p>
+            <ul class="list-unstyled"></ul>
+                {% for tag in tags %}
+                    <li class="d-inline badge border border-primary border-2 text-primary">{{ tag }}</li>
+                {% endfor %}
+        </ul>
         </div>
     </div>
 {% endblock %}
