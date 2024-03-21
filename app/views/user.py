@@ -7,6 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 bp = Blueprint('users', __name__)
 login_manager = LoginManager()
 
+
 @login_manager.user_loader
 def user_loader(user_id):
     user = Users.query.get(int(user_id))

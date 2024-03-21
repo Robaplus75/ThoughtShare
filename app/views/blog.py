@@ -1,11 +1,12 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
 from flask_login import current_user, login_required
-from ..utils import slugify
+from ..utils import slugify, pagination
 from werkzeug.utils import secure_filename
 from ..models.blog import Posts
 from ..extensions import db
 from datetime import datetime
 from .tags import create_tags, update_tags, get_tags
+from sqlalchemy import or_
 import os
 
 
@@ -20,8 +21,28 @@ def save_image(file):
 
 @bp.route('/')
 def posts():
+    keywords = request.args.get('q')
+    if keywords:
+        return redirect(url_for('blog.search_posts', keywords=keywords))
     posts = Posts.query.all()
-    return render_template('index.html', posts=posts)
+    page = request.args.get('page') or 1
+    count = len(posts)
+    paginate = pagination(count, int(page), 1)
+    print(paginate['prev_page'])
+    posts = posts[paginate['offset']:(paginate['offset'] + paginate['per_page'])]
+
+    return render_template('index.html', posts=posts, paginate=paginate, keywords=None)
+
+@bp.route('/search/<keywords>')
+def search_posts(keywords):
+    q = keywords
+    page = request.args.get('page') or 1
+    posts = Posts.query.filter(or_(Posts.title.like(f"%{q}%"), Posts.body.like(f"%{q}%"))).all()
+    paginate = pagination(len(posts), int(page))
+    posts = posts[paginate['offset']:(paginate['offset'] + paginate['per_page'])]
+    
+    return render_template('index.html', posts=posts, paginate=paginate, keywords=keywords)
+
 
 @bp.route("/create", methods=["GET", "POST"])
 @login_required

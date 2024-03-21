@@ -16,7 +16,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="body" class="form-label">Body</label>
-                    <textarea name="body" id="body" class="form-control">{{post.body}}</textarea>
+                    <textarea rows='10' name="body" id="body" class="form-control">{{post.body or lipsum(3)}}</textarea>
                 </div>
                 <div class="mb-3">
                     <label for="tags" class="form-label">Tags</label>

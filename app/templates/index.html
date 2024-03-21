@@ -1,6 +1,15 @@
 {% extends 'layout.html' %}
 {% block content %}
+
     <div class="container">
+        <div class="col-md-6 offset-md-3">
+            <form method="GET" action="/">
+                <div class="input-group mb-3">
+                    <input type="text" name="q" id="q" class="form-control" placeholder="Find Post" value="{%if keywords%}{{keywords}}{%endif%}">
+                    <button class="btn btn-primary">Go</button>
+                </div>
+            </form>
+        </div>
         <div class="col-md-8 offset-md-2">
             {% for post in posts %}
             <div class="row align-items-center">
@@ -9,12 +18,33 @@
                 </div>
                 <div class="col-md-8">
                     <h3><a href="{{ url_for('blog.detail', slug=post.slug) }}">{{ post.title }}</a></h3>
-                    <p>{{ post.body }}</p>
+                    <p>{{ post.body|truncate }}</p>
                     <a href="{{ url_for('blog.detail', slug=post.slug) }}" class="btn btn-primary">Read more</a>
                 </div>
             </div>
             <hr>
             {% endfor %}
         </div>
+        <nav aria-label="Page navigation example" class="paginate_nav">
+            <ul class="pagination">
+                {% if paginate.prev_page >= 1%}
+                <li class="page-item">
+                    <a href="/{% if keywords %}search/{{keywords}}{% endif %}?page={{ paginate.prev_page }}" class="page-link" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+                {% for page in paginate.pages %}
+                <li class="page_item"><a href="/{% if keywords %}search/{{keywords}}{% endif %}?page={{ page }}" class="page-link {% if paginate.page == page %}active{%endif%}">{{page}}</a></li>
+                {% endfor %}
+                {% if paginate.page_no >= paginate.next_page %}
+                <li class="page_item">
+                    <a href="/{% if keywords %}search/{{keywords}}{% endif %}?page={{ paginate.next_page }}" class="page-link" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
     </div>
 {% endblock %}

@@ -36,9 +36,21 @@ def create_app():
 
     return app
 
+def create_admin(name, email, password, app):
+    from .models import Users
+    from werkzeug.security import generate_password_hash
+    with app.app_context():
+        hash_password = generate_password_hash(password)
+        admin = Users(username=name, email=email, password=hash_password, is_admin=True)
+        db.session.add(admin)
+        db.session.commit()
+
+
 def create_db(app):
     from .models import Users, Tags, Posts, Tagged_items
     with app.app_context():
         db.create_all()
+    
+    create_admin("admin", "admin@gmail.com", "admin", app)
 
 app = create_app()
