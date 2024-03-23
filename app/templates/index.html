@@ -6,7 +6,7 @@
             <form method="GET" action="/">
                 <div class="input-group mb-3">
                     <input type="text" name="q" id="q" class="form-control" placeholder="Find Post" value="{%if keywords%}{{keywords}}{%endif%}">
-                    <button class="btn btn-primary">Go</button>
+                    <button class="btn btn-primary"><i class="bi bi-search"></i></button>
                 </div>
             </form>
         </div>
@@ -17,7 +17,7 @@
                     <img src="{{ url_for('uploads', filename=post.image) }}" alt="image" class="img-fluid">
                 </div>
                 <div class="col-md-8">
-                    <h3><a href="{{ url_for('blog.detail', slug=post.slug) }}">{{ post.title }}</a></h3>
+                    <h3><a href="{{ url_for('blog.detail', slug=post.slug) }}" class="text-decoration-none fw-bold">{{ post.title }}</a></h3>
                     <p>{{ post.body|truncate }}</p>
                     <a href="{{ url_for('blog.detail', slug=post.slug) }}" class="btn btn-primary">Read more</a>
                 </div>

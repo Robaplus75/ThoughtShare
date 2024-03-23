@@ -2,3 +2,4 @@ env/
 instance/
 uploads/
 __pycache__/
+node_modules/
