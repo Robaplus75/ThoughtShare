@@ -3,52 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
     <link href="{{url_for('static', filename='app.css')}}" rel="stylesheet">
-    <title>{% block title %}Devblog{% endblock %}</title>
+    <script src="https://kit.fontawesome.com/649eb2f227.js" crossorigin="anonymous"></script>
+    <title>{% block title %}ThoughtShare{% endblock %}</title>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
-            <a class="navbar-brand" href="{{url_for('blog.posts')}}">DevBlog</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <nav class="navbar navbar_color navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="{{url_for('blog.posts')}}">ThoughtShare</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-ul navbar-nav ms-auto justify-content-center"> <!-- Center the items -->
                 {% if not current_user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('users.login') }}">Log In</a>
-                        </li>
-                        <li class="nav-item">
+                        <a class="nav-link btn btn-primary" href="{{ url_for('users.login') }}">Log In</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link btn btn-primary" href="{{ url_for('users.register') }}">Register</a>
                     </li>
                 {% else %}
-                    <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('users.logout') }}">LogOut</a>
-                    </li>
+                    <center>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('users.logout') }}">LogOut</a>
+                        </li>
+                    </center>
                     {% if post and current_user['is_admin'] %}
-                        <li class="nav-item">
-                            <a class="nav-link btn btn-warning active" href="{{ url_for('blog.update', slug=post.slug) }}">Edit Post</a>
-                        </li>
+                        <center>
+                            <li class="nav-item">
+                                <a class="nav-link btn btn-warning active" href="{{ url_for('blog.update', slug=post.slug) }}">Edit Post</a>
+                            </li>
+                        </center>
                     {% elif current_user['is_admin'] %}
-                        <li class="nav-item">
-                            <a class="nav-link btn btn-primary active" href="{{ url_for('blog.create') }}">Create Post</a>
-                        </li>
+                        <center>
+                            <li class="nav-item">
+                                <a class="btn btn-primary" href="{{ url_for('blog.create') }}">Post Thought</a>
+                            </li>
+                        </center>
                     {% endif %}
                 {% endif %}
             </ul>
-            </div>
         </div>
-      </nav>
+    </div>
+</nav>
+
+    
       <div class="header d-flex align-items-center mb-3 mb-md-5">
-        <div class="container">
+        <div class="container  header_bar">
             <h1 class="dispaly-4">
                 {% block page_header %}
                     ThoughtShare
                 {% endblock %}
-            </h1>
+            </h1>  
+            {% block finder %}
+            {% endblock finder %}
         </div>
       </div>
     
@@ -61,5 +73,6 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='index.js')}}"></script>
 </body>
 </html>

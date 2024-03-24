@@ -2,14 +2,16 @@
 
 {% block page_header %}
     {{ post.title }}
-    <span class="d-block text-white fs-5 text-uppercase">{{ post.publish }}</span>
+    <span class="d-block text-white fs-6 text-uppercase">{{ post.publish }}</span>
 {% endblock page_header %}
 
 {% block content %}
     <div class="container">
         <div class="col-md-8 offset-md-2">
-            <img src="{{ url_for('uploads', filename=post.image) }}" alt="image" class="img-fluid">
-            <p>{{ post.body }}</p>
+            {% if post.image %}
+                <img src="{{ url_for('uploads', filename=post.image) }}" alt="image" class="img-fluid">
+            {% endif %}
+                <p>{{ post.body }}</p>
             <ul class="list-unstyled"></ul>
                 {% for tag in tags %}
                     <li class="d-inline badge border border-primary border-2 text-primary">{{ tag }}</li>

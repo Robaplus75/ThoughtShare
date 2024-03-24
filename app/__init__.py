@@ -47,7 +47,7 @@ def create_admin(name, email, password, app):
 
 
 def create_db(app):
-    from .models import Users, Tags, Posts, Tagged_items
+    from .models import Users, Tags, Posts, Tagged_items, Like, Comment
     with app.app_context():
         db.create_all()
     

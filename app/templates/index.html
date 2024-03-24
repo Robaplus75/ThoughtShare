@@ -1,21 +1,26 @@
 {% extends 'layout.html' %}
+{% block finder %}
+    <div class="col-md-6 offset-md-3">
+        <form method="GET" action="/">
+            <div class="input-group mb-3">
+                <input type="text" name="q" id="q" class="form-control" placeholder="Find Post" value="{%if keywords%}{{keywords}}{%endif%}">
+                <button class="btn btn-primary"><i class="bi bi-search"></i></button>
+            </div>
+        </form>
+    </div>
+{% endblock finder %}
+
 {% block content %}
 
     <div class="container">
-        <div class="col-md-6 offset-md-3">
-            <form method="GET" action="/">
-                <div class="input-group mb-3">
-                    <input type="text" name="q" id="q" class="form-control" placeholder="Find Post" value="{%if keywords%}{{keywords}}{%endif%}">
-                    <button class="btn btn-primary"><i class="bi bi-search"></i></button>
-                </div>
-            </form>
-        </div>
         <div class="col-md-8 offset-md-2">
             {% for post in posts %}
             <div class="row align-items-center">
-                <div class="col-md-4">
-                    <img src="{{ url_for('uploads', filename=post.image) }}" alt="image" class="img-fluid rounded">
-                </div>
+                {% if post.image %}
+                    <div class="col-md-4">
+                        <img src="{{ url_for('uploads', filename=post.image) }}" alt="image" class="img-fluid rounded">
+                    </div>
+                {% endif %}
                 <div class="col-md-8">
                     <h3><a href="{{ url_for('blog.detail', slug=post.slug) }}" class="text-decoration-none fw-bold">{{ post.title }}</a></h3>
                     {%if not post.publish %}
@@ -23,12 +28,71 @@
                     {% else %}
                         {% if post.publish > now %}
                             <div class="badge border text-dark border-dark border-2"><i class="bi bi-clock"></i> Scheduled</div>
+                        {% else %}
+                            <div class="fs-6 text-muted text-uppercase">{{ post.publish }}</div>
                         {% endif %}
                     {% endif %}
                     <p>{{ post.body|truncate }}</p>
                     <a href="{{ url_for('blog.detail', slug=post.slug) }}" class="btn btn-primary">Read more</a>
                 </div>
+
+                <!-- Comment And Likes -->
+                <div class="card-body">
+                    <br />
+                    <div class="collapse" id="comments-{{post.id}}">
+                        <div class="card">
+                            <div class="card-body" id="comments-expanded-{{post.id}}">
+                                {% for comment in post.comments %}
+                                    <div class="d-flex mt-2 justify-content-between align-items-center">
+                                        <div>
+                                            <span class="text-primary">{{comment.user.username}}</span>: {{comment.text}}
+                                        </div>
+                                        <div>
+                                            <small class="text-muted">
+                                                {{comment.date_created}}
+                                            </small>
+                                            {% if user.id == comment.author or user.id == post.user_id %}
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown"></button>
+                                                    <ul class="dropdown-menu">
+                                                        <a href="/delete-comment/{{ comment.id }}"><li class="dropdown-item">Delete</li></a>
+                                                    </ul>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <form class="input-group mb-3 comment-bar" method="POST" action="/create-comment/{{post.id}}">
+                            <input type="text" id="text" name="text" class="form-control" placeholder="Comment something!" />
+                            <button type="submit" class="btn btn-primary">Comment</button>
+                        </form>
+                    </div>
+                    <div class="comment-like">
+                            <a data-bs-toggle="collapse" href="#comments-{{post.id}}" role="button">
+                                <i class="bi bi-chat-quote-fill comment-icon"></i> 
+                            </a>
+                            <div>
+                                {% if user.id in post.likes|map(attribute="author")|list %}
+                                <button type="button" class="mx-3 btn btn-primary" id="like-button-{{post.id}}" onclick="like({{post.id}})">
+                                    <i class="bi bi-hand-thumbs-up-fill"></i>
+                                </button>
+                                {% else %}
+                                <button type="button" class="mx-3 btn btn-primary" id="like-button-{{post.id}}" onclick="like({{post.id}})">
+                                    <i class="bi bi-hand-thumbs-up"></i>
+                                </button>
+                                {% endif %}
+                                <span id="likes-count-{{post.id}}"> {{ post.likes|length }}</span> 
+                            </div>
+                    </div>
+                    
+                </div>
+                    <div class="card-footer text-muted">
+                        {{ post.date_created}}
+                    </div>
             </div>
+                <!-- End comments and likes-->
             <hr>
             {% endfor %}
         </div>
