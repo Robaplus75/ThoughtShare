@@ -31,7 +31,7 @@ def posts():
     print(paginate['prev_page'])
     posts = posts[paginate['offset']:(paginate['offset'] + paginate['per_page'])]
 
-    return render_template('index.html', posts=posts, paginate=paginate, keywords=None)
+    return render_template('index.html', posts=posts, paginate=paginate, keywords=None, now=datetime.now().date())
 
 @bp.route('/search/<keywords>')
 def search_posts(keywords):
@@ -41,7 +41,7 @@ def search_posts(keywords):
     paginate = pagination(len(posts), int(page))
     posts = posts[paginate['offset']:(paginate['offset'] + paginate['per_page'])]
     
-    return render_template('index.html', posts=posts, paginate=paginate, keywords=keywords)
+    return render_template('index.html', posts=posts, paginate=paginate, keywords=keywords, now=datetime.now().date())
 
 
 @bp.route("/create", methods=["GET", "POST"])
