@@ -123,5 +123,7 @@ def delete(slug):
     if not post:
         flash("Post does not exist", category='error')
     else:
+        db.session.delete(post)
+        db.session.commit()
         flash("Post was Deleted", category='danger')
     return redirect(url_for('blog.posts'))
