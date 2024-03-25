@@ -18,6 +18,9 @@ def save_image(file):
     file.save(image_url)
     return filename
 
+@bp.route('/landing-page')
+def landing_page():
+    return render_template("landing_page.html")
 
 @bp.route('/')
 def posts():
