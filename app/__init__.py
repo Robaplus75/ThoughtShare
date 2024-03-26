@@ -1,3 +1,4 @@
+""" Project Package  """
 from flask import Flask, send_from_directory
 from os import path, makedirs
 from .extensions import db
