@@ -16,7 +16,7 @@ class Posts(db.Model):
     image = db.Column(db.String(50))
     slug = db.Column(db.String(50), nullable=False, unique=True)
     body = db.Column(db.Text, nullable=False)
-    publish = db.Column(DATE)
+    publish = db.Column(DateTime(timezone=True), default=func.now())
     user_id = db.Column(db.Integer, ForeignKey("users.id"))
     tagged_items = relationship('Tagged_items', backref='tagged_posts', cascade='all, delete-orphan')
     comments = relationship("Comment", backref='post', cascade='all, delete-orphan')

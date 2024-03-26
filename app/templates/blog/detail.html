@@ -8,15 +8,17 @@
 {% block content %}
     <div class="container">
         <div class="col-md-8 offset-md-2">
+            <center>
             {% if post.image %}
-                <img src="{{ url_for('uploads', filename=post.image) }}" alt="image" class="img-fluid">
+                <img src="{{ url_for('uploads', filename=post.image) }}" alt="image" class="img-fluid" style="max-height: 400px;">
             {% endif %}
-                <p>{{ post.body }}</p>
+            </center>
+            <p style="border: 2px solid #7c4dd4; margin-top: 10px;padding: 20px; border-radius:30px">{{ post.body }}</p>
             <ul class="list-unstyled"></ul>
                 {% for tag in tags %}
                     <li class="d-inline badge border border-primary border-2 text-primary">{{ tag }}</li>
                 {% endfor %}
-        </ul>
+            </ul>
         </div>
     </div>
 {% endblock %}

@@ -31,22 +31,18 @@
                 </div>
                 <div class="mb-3">
                     <label for="image" class="form-label">Image</label>
-                    {% if post %}
+                    {% if post and post.image%}
                         <a href="{{url_for('uploads', filename=post.image)}}">{{url_for('uploads', filename=post.image)}}</a>
                     {% endif %}
                     <input type="file" name="image" id="image" class="form-control">
                 </div>
                 <div class="mb-3">
                     <label for="body" class="form-label">Body</label>
-                    <textarea rows='10' name="body" id="body" class="form-control">{{post.body or lipsum(3)}}</textarea>
+                    <textarea rows='10' name="body" id="body" class="form-control">{{post.body}}</textarea>
                 </div>
                 <div class="mb-3">
                     <label for="tags" class="form-label">Tags</label>
                     <input type="text" name="tags" id="tags" class="form-control" value="{{','.join(tags)}}">
-                </div>
-                <div class="mb-3">
-                    <label for="publish" class="form-label">Publish</label>
-                    <input type="date" name="publish" id="publish" class="form-control" value="{{post.publish}}">
                 </div>
                 <hr>
                 <button class="btn btn-primary btn-lg float-start">Save Post</button>

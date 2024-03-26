@@ -55,19 +55,17 @@ def create():
         slug = slugify(title)
         image = request.files.get("image")
         body = request.form.get("body")
-        publish = request.form.get("publish")
         tags = request.form.get("tags")
         user_id = current_user.id
 
-        if not title or not slug or not body or not publish or not tags:
+        if not title or not slug or not body or not tags:
             flash("Please complete the form to Post you thoughts", category="error")
         else:
-            publish_date = datetime.strptime(publish, '%Y-%m-%d').date()
             if image:
                 filename = save_image(image)
-                post = Posts(title=title, image=filename, slug=slug, body=body, publish=publish_date, user_id=user_id )
+                post = Posts(title=title, image=filename, slug=slug, body=body, user_id=user_id )
             else:
-                post = Posts(title=title, slug=slug, body=body, publish=publish_date, user_id=user_id )
+                post = Posts(title=title, slug=slug, body=body, user_id=user_id )
             db.session.add(post)
             db.session.commit()
             
@@ -102,9 +100,8 @@ def update(slug):
         image = request.files.get("image")
         body = request.form.get("body")
         tags = request.form.get("tags")
-        publish = request.form.get("publish")
 
-        if not title or not slug or not body or not publish:
+        if not title or not slug or not body:
             flash("Please complete the form to update your post", category="error")
         else:
             if image:
@@ -115,7 +112,6 @@ def update(slug):
             post.title = title
             post.slug = slug
             post.body = body
-            post.publish = datetime.strptime(publish, '%Y-%m-%d').date()
             
             db.session.commit()
             flash("Post Updated Successfully", category="success")

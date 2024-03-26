@@ -26,11 +26,7 @@
                     {%if not post.publish %}
                         <div class="badge text-danger border border-danger border-2"><i class="bi bi-pen">Draft</i></div>
                     {% else %}
-                        {% if post.publish > now %}
-                            <div class="badge border text-dark border-dark border-2"><i class="bi bi-clock"></i> Scheduled</div>
-                        {% else %}
-                            <div class="fs-6 text-muted text-uppercase">{{ post.publish }}</div>
-                        {% endif %}
+                        <div class="fs-6 text-muted text-uppercase">{{ post.publish }}</div>
                     {% endif %}
                     <p>{{ post.body|truncate }}</p>
                     <a href="{{ url_for('blog.detail', slug=post.slug) }}" class="btn btn-primary">Read more</a>
