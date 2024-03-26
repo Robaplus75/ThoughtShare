@@ -29,16 +29,6 @@ Before running the project, ensure that the following dependencies are installed
     psycopg2
     Werkzeug
 
-Setup
-
-To set up the project, follow these steps:
-
-    Create a new PostgreSQL database.
-    Update the config.py file with the database credentials.
-    Run the following command in the terminal to create the database tables:
-
-flask db upgrade
-
 Technology Stack
 
     Python 3.x
